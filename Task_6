@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 10000
+
+
+
+int Bucket_sort (int n, int arr[n]){
+    int digit, dig, i, j, k;
+    int bucket[10][n + 1];
+    
+    for(i = 0; i < 10; i++)
+        for (j = 0; j < n + 1; j++){
+            bucket[i][j] = 0;    
+    } 
+    int count = 0;
+    int res = 0;
+    for(digit = 1; digit <= MAX; digit *= 10) {
+        for(i = 0; i < n; i++) {
+            dig = (arr[i] / digit) % 10;
+            bucket[dig][bucket[dig][n]++] = arr[i];
+        }
+        if( digit < 10 ){
+            for (i = 0; i < 10; i++){
+                if (bucket[i][0] != 0){  
+                    for (j = i + 1; j < 10; j++)
+                        if (bucket[j][0] != 0)
+                            count++;
+                }
+            }
+        }
+        
+        int idx = 0;
+        for(j = 0; j < 10; j++) {
+            for(k = 0; k < bucket[j][n]; k++) {
+                arr[idx++] = bucket[j][k];
+            }
+            bucket[j][n] = 0;
+        }
+    }
+    return count;
+}
+
+int main()
+{
+    int n;
+    scanf ("%d", &n);
+    int arr[n];
+    int i;
+    
+    for (i = 0; i < n; i ++){
+        scanf ("%d", arr + i);
+    }
+    
+    int ans;
+    ans = Bucket_sort(n, arr);
+    if (ans % 2 == 0) 
+        printf ("Even permutation");
+    else printf ("Odd permutation");
+    
+    return 0;
+}
